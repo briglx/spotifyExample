@@ -17,8 +17,10 @@
     @endif
 
     <button class="btn categories">Get Categories</button>
-
     <div class="target categories"></div>
+
+    <button class="btn playlist">Get Playlist</button>
+    <div class="target playlist"></div>
     
     <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="js/main.js"></script>

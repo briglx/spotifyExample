@@ -19,3 +19,4 @@ Route::get('/logout', "MainController@logout");
 Route::get('/api/callback', "MainController@spotifyCallback");
 
 Route::get('/api/categories', "MainController@spotifyCategories");
+Route::get('/api/playlist', "MainController@spotifyPlaylist");

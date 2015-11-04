@@ -20,7 +20,13 @@ Class MainController extends Controller {
         return view("home", ["username"=>$username, "error"=>""]);
     }
 
-    function logout(){
+    function logout(Request $request){
+
+        $request->session()->set('accessToken', "");
+        $request->session()->set('username', "");
+        $request->session()->set('userInfo', "");
+
+        return redirect('/');
 
     }
     function spotifyAuthenticate(Request $request){
@@ -28,7 +34,7 @@ Class MainController extends Controller {
         $state = $this->generateRandomString(16);
         $request->session()->set($this->stateKey, $state);
 
-        $scope = 'user-read-private user-read-email';
+        $scope = 'user-read-private user-read-email playlist-read-collaborative';
 
         $queryString = http_build_query([
                 "response_type" => 'code',
@@ -110,10 +116,7 @@ Class MainController extends Controller {
 
     }
 
-    function spotifyPlaylist(Request $request){
-
-    }
-
+   
     function spotifyCategories(Request $request, Response $response){
 
         $url = "https://api.spotify.com/v1/browse/categories";
@@ -131,6 +134,27 @@ Class MainController extends Controller {
 
     }
 
+    function spotifyPlaylist(Request $request){
+
+        echo "Get Playlist";
+
+        $url = "https://api.spotify.com/v1/users/" + 123889574 + "/playlists";
+
+        $access_token = $request->session()->get('accessToken');
+
+        $curl = new Curl();
+        $curl->setHeader("Authorization", "Bearer " . $access_token);
+        $curl->setHeader("Content-Type", "text/json");
+        $curl->get($url);
+        
+        $json = json_decode($curl->response);
+
+        return response()->json($json);
+        
+    }
+
+    
+
     function generateRandomString($length){
         $text = "";
         $possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -140,5 +164,6 @@ Class MainController extends Controller {
         }
         return $text;
     }
+
 
 }
