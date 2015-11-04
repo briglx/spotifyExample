@@ -17,3 +17,5 @@ Route::get('/login', "MainController@spotifyAuthenticate");
 Route::get('/logout', "MainController@logout");
 
 Route::get('/api/callback', "MainController@spotifyCallback");
+
+Route::get('/api/categories', "MainController@spotifyCategories");

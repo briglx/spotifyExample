@@ -75,7 +75,7 @@ Class MainController extends Controller {
             $curl->setHeader("Content-Type", "application/x-www-form-urlencoded");
             $curl->post("https://accounts.spotify.com/api/token", array(
                 "code"=>$code,
-                "redirect_uri" => $redirectUri,
+                "redirect_uri" => $this->redirectUri,
                 "grant_type" => 'authorization_code'));
 
             
@@ -96,6 +96,7 @@ Class MainController extends Controller {
                 $json = json_decode($curl->response);
 
                 // User is authenticated
+                $request->session()->set('accessToken', $access_token);
                 $request->session()->set('username', $json->id);
                 $request->session()->set('userInfo', $json);
 
@@ -106,6 +107,27 @@ Class MainController extends Controller {
         } catch (Exception $ex) {
             echo $ex;
         }
+
+    }
+
+    function spotifyPlaylist(Request $request){
+
+    }
+
+    function spotifyCategories(Request $request, Response $response){
+
+        $url = "https://api.spotify.com/v1/browse/categories";
+
+        $access_token = $request->session()->get('accessToken');
+
+        $curl = new Curl();
+        $curl->setHeader("Authorization", "Bearer " . $access_token);
+        $curl->setHeader("Content-Type", "text/json");
+        $curl->get($url);
+        
+        $json = json_decode($curl->response);
+
+        return response()->json($json);
 
     }
 
